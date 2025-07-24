@@ -1,0 +1,130 @@
+# How to:
+# python3 main.py
+
+datasets:
+  sequence-size: 5 # must be >= 1
+  combinations: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]]
+  kitti:
+    #____________________Process3
+    process_number: 2
+    #1: save lidar and geometry data
+    #2: train model
+    #3: run saved model
+    #4: Visualization
+
+    #_____________________Create inputs
+    seq: '07'
+    #_____________________Train 00:4540/  01:1100/road  02:4660/  03:800/  04:270/  05:2760/
+    # Test:
+    # sequences: [ '01', '02', '03','04','05','06', '07','08','09']
+    sequences: ['07']
+    # Train:
+    # sequences_all: ['01', '02', '03','04','05','06', '07','08']
+    sequences_all: ['07']
+    
+    scans: [4540, 1100, 4660, 800, 270, 2760, 1100, 1100, 4070, 1590, 1200, 920, 1060, 3280, 630, 345]
+    #      ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15']
+    #____________________________
+    pc_path: '/nas2/zahra/Kitti/dataset/sequences/'
+    gt_path:  '/nas2/zahra/Kitti/dataset/poses/'
+    output_path: '/nas2/zahra/INAF/results/'
+    root-path-sync: "datasets/KITTI/sync"
+    root-path-unsync: "datasets/KITTI/extract"
+    image-width: 720    #720
+    image-height: 64   #57
+    crop-factors: [0, 0] # [0, 4] # top, left
+    fov-up: 3.
+    fov-down: -25.
+    max-depth: 80.
+    min-depth: 1.
+    inverse-depth: true
+
+    all_images_path: '/nas2/zahra/INAF/results/network_input_files/all_images/'
+
+    validation:
+      #2011-09-26: [23, 39]
+      2011-09-30: [33, 34]
+
+    # channesl: x, y, z, remission, nx, ny ,nz, range)
+    mean-image: [-0.0014, 0.0043, -0.011, 0.2258, -0.0024, 0.0037, 0.3793, 0.1115]
+    std-image: [0.1269, 0.0951, 0.0108, 0.1758, 0.3436, 0.4445, 0.5664, 0.0884]
+
+    mean-imu: [-0.0685, 0.1672, 9.7967, -0., 0.0006, 0.0059]
+    std-imu: [0.8766, 0.9528, 0.3471, 0.0204, 0.0227, 0.1412]
+
+    channels: [0, 1, 2, 4, 5, 6, 7]
+
+    channelsnames: ['x','y','z','remission', 'nx', 'ny' ,'nz', 'range']
+
+Networks:
+  #_________________________________________________
+  #  Method: 'supervised' , 'self_supervised'
+  #_________________________________________________
+  method: 'supervised'
+  loss_types: [1,1,1]  # p2p p2pl pl2pl
+  #_________________________________________________
+  #  Branch: 'geo', 'lidar', 'all'
+  #_________________________________________________
+  # branch_mode: 'lidar' 'geo' 'all
+  branch_mode: 'geo'
+  hyper_overwrite: True
+  #_________________________________________________
+  #  Data_preparation: 'saved', 'saved_all', 'tfdata', 'tfrecord'
+  #  New setup: saved_all or custom_gen
+  #_________________________________________________
+  data_pre: 'saved_all'
+  batch_gen: False
+  #_________________________________________________
+  #  Fusion: direct, soft, INAF
+  #_________________________________________________
+  fusion: 'soft'
+  calculate_fprimes: False
+  #_________________________________________________
+  #  General
+  #_________________________________________________
+  Batch_size: 8 #8
+  Epochs: 700
+  time_size: 4
+  loss_weights: [ 10,10000 ]
+  divided_train:  4540 #15860 #4660
+  # 7: 1100, 9: 1590
+  #________________________________________________
+  #  rotation representation: 'quart', 'expn', 'dquart'
+  #________________________________________________
+  rot_rep: 'dquart'
+  #_________________________________________________
+  #  paths
+  #_________________________________________________
+  Save_path: './saved_model'
+  save_txt_path_result: './results/Kitti_Eval/Result'
+  save_txt_path2: './results/XYZijkw'
+  save_txt_path_input: './results/Kitti_Eval/Ge_data_input'
+  save_txt_path4: './results/Kitti_Eval/TT'
+  
+  saved_model: '2024_07_30_14_09'
+  saved_param: '2024_04_09_21_49'
+  #'2023_11_27_02_47':  ['01', '02', '03', '05']
+  #_________________________________________________
+  run_over: False
+  pre_trained_model: '2024_07_27_14_53' #INAF LIDAR
+  # pre_trained_model: '2024_03_12_14_55' #7
+  # pre_trained_model: '2024_03_06_08_54' #5
+  
+Visualization:
+  #_________________________________________________
+  #  pixelvalue: 'reflectance', 'range', 'xyz', 'normals'
+  #_________________________________________________
+  do_vis: True
+  pixelvalue: 'xyz'
+
+
+#07: lidar
+  # saved_model: '2024_03_13_13_33'
+  # saved_param: '2024_03_12_18_00'
+  
+# 07: all
+# saved param direct: 2024_04_03_07_52
+
+#Geo                  2024_07_23_21_26
+#Lidar                2024_07_28_00_42
+#All                  2024_07_28_20_50
