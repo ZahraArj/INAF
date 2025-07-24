@@ -18,26 +18,21 @@ INAF/
 ├── hyperparam
 
 
-## Dataset Setup (KITTI Odometry)
 
-To use this project, you **must first download the KITTI Odometry dataset** from the official website:
+Dataset Setup
 
-🔗 **KITTI Odometry Dataset**:  
-[http://www.cvlibs.net/datasets/kitti/eval_odometry.php](http://www.cvlibs.net/datasets/kitti/eval_odometry.php)
+Before running the code, download the KITTI Odometry Dataset from:
+http://www.cvlibs.net/datasets/kitti/eval_odometry.php
 
-### Required Folders to Update
+After extracting the dataset, update the following three paths in your config.yaml file:
 
-After downloading and extracting the dataset, **you must edit the `config.yaml` to match your local paths**:
+pc_path: '/your/local/path/Kitti/dataset/sequences/'     # LiDAR point clouds
+gt_path:  '/your/local/path/Kitti/dataset/poses/'        # Ground-truth poses
+output_path: '/your/local/path/INAF/results/'            # Where results will be saved
 
-```yaml
-pc_path: '/your/local/path/Kitti/dataset/sequences/'
-gt_path:  '/your/local/path/Kitti/dataset/poses/'
-output_path: '/your/local/path/INAF/results/'
+Environment Setup
 
-
-## Environment Setup
-
-Before running the code, create and activate the required Conda environment:
+To set up the required Python environment, run the following commands:
 
 conda env update -f environment.yml --prune
 conda install -c anaconda pytables
@@ -48,56 +43,53 @@ pip install tensorflow-graphics
 pip install keras-tuner==1.3.5
 conda activate venv3
 
-## How to Run
+How to Run
 
-Run the main script:
+Once the config file is ready, run the main script:
+
 python3 main.py
-
-Make sure to update the config file before executing.
-
 
 Configuration Guide (config.yaml)
 
-Before running the code, edit the config file to match your desired setup.
+Before running, make sure to edit the configuration file appropriately:
 
-Key Configuration Steps:
-	•	Set the correct mode in process_number under datasets.kitti.
-	•	Set your KITTI data paths:
-	•	pc_path
-	•	gt_path
-	•	output_path
-	•	Choose sequences:
-	•	For training: sequences_all
-	•	For testing: sequences
-	•	Set desired model and fusion parameters:
-	•	branch_mode, fusion, method, etc.
+- Set the desired pipeline mode using process_number under datasets.kitti
+- Set your KITTI data paths:
+    pc_path
+    gt_path
+    output_path
+- Set sequences:
+    sequences: for testing
+    sequences_all: for training
+- Set model configuration:
+    branch_mode, fusion, method, etc.
 
-⸻
+Pipeline Modes (process_number)
 
-Run Modes (process_number)
-Mode
-Description
-1
-Save LiDAR and geometry data (preprocess input)
-2
-Train the model (requires data prepared in Mode 1)
-3
-Run the trained model (set pre_trained_model to the model folder name)
-4
-Visualization of model outputs
-
+Mode 1: Save LiDAR and geometry data (preprocessing)
+Mode 2: Train the model
+Mode 3: Run the trained model (set pre_trained_model to the saved model folder name)
+Mode 4: Visualize model predictions
 
 Workflow
-	1.	Prepare input data:
-	•	Set process_number: 1
-	•	This will preprocess and save data needed for training.
-	2.	Train the model:
-	•	Set process_number: 2
-	•	Tune hyperparameters if needed.
-	•	Training outputs will be saved in the saved_model/ directory.
-	3.	Run the trained model:
-	•	Set process_number: 3
-	•	Update pre_trained_model with the folder name of the trained model.
-	4.	Visualize results:
-	•	Set process_number: 4
-	•	Choose the desired pixelvalue under Visualization.
+
+1. Prepare input data:
+    - Set process_number: 1
+    - This step preprocesses LiDAR and geometry data and saves them to disk
+
+2. Train the model:
+    - Set process_number: 2
+    - Tune hyperparameters if needed
+    - Trained models are saved under saved_model/
+
+3. Run a trained model:
+    - Set process_number: 3
+    - Set pre_trained_model to the name of the saved model folder
+
+4. Visualize predictions:
+    - Set process_number: 4
+    - Choose the desired pixelvalue under the Visualization section
+
+Contact
+
+For questions, please open an issue or contact the repository maintainer.
