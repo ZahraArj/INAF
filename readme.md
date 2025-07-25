@@ -19,6 +19,21 @@ This repository implements the INAF method for LiDAR pose estimation using seque
   - hyperparam/
 
 
+## Environment Setup
+
+To run this project, create and activate the required Conda environment:
+
+```bash
+conda env update -f environment.yml --prune
+conda install -c anaconda pytables
+conda install -c conda-forge hickle
+conda install -c conda-forge pytransform3d
+conda install scikit-learn
+pip install tensorflow-graphics
+pip install keras-tuner==1.3.5
+conda activate venv3
+```
+
 ## 1. Dataset Setup
 
 To use this project, download the KITTI Odometry dataset from the official website:
@@ -37,7 +52,7 @@ output_path: '/your/local/path/INAF/results/'            # Output results
 
 Once the config file is ready, run the main script:
 
-```
+```bash
 python3 main.py
 ```
 
@@ -57,7 +72,7 @@ Before running, update the configuration file with your specific settings.
 
 In the following section of the config file, set your desired branch and fusion strategy:
 
-```
+```yaml
 branch_mode: 'geo'       # Options: 'geo', 'lidar', 'all'
 fusion: 'soft'           # Options: 'direct', 'soft', 'INAF'
 hyper_overwrite: True
@@ -72,7 +87,7 @@ Change branch_mode and fusion here depending on your experiment.
 
 To load a trained model and its hyperparameters (in Mode 3), set:
 
-```
+```yaml
 pre_trained_model: '2024_07_27_14_53'
 ```
 
