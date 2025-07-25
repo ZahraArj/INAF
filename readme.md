@@ -43,18 +43,40 @@ python3 main.py
 
 ## 3. Configuration Guide (config.yaml)
 
-Before running, make sure to edit the configuration file appropriately:
+Before running, update the configuration file with your specific settings.
 
-- Set the desired pipeline mode using process_number under datasets.kitti
-- Set your KITTI data paths:
-    pc_path
-    gt_path
-    output_path
-- Set sequences:
-    sequences: for testing
-    sequences_all: for training
-- Set model configuration:
-    branch_mode, fusion, method, etc.
+### 3.1. Required Fields
+	•	process_number: Mode of operation (see Section 5)
+	•	pc_path, gt_path, output_path: Local dataset and output paths
+	•	sequences_all: List of sequences used for training
+	•	sequences: List of sequences used for testing
+	•	branch_mode, fusion, method: Model structure and strategy
+	•	pre_trained_model: Path to a trained model folder (used in Mode 3)
+
+### 3.2. Changing Branch and Fusion Settings
+
+In the following section of the config file, set your desired branch and fusion strategy:
+
+```
+branch_mode: 'geo'       # Options: 'geo', 'lidar', 'all'
+fusion: 'soft'           # Options: 'direct', 'soft', 'INAF'
+hyper_overwrite: True
+data_pre: 'saved_all'
+batch_gen: False
+calculate_fprimes: False
+```
+
+Change branch_mode and fusion here depending on your experiment.
+
+### 3.3. Loading Trained Models
+
+To load a trained model and its hyperparameters (in Mode 3), set:
+
+```
+pre_trained_model: '2024_07_27_14_53'
+```
+
+Replace the value with the name of your saved model directory.
 
 ## 4. Pipeline Modes (process_number)
 
